@@ -52,16 +52,20 @@ module.exports = function(app, passport, db) {
     })
 
     app.put('/messages', (req, res) => {
-      const _id = ObjectId(req.body._id)
-      const title = req.params.title
-      const newStatus = req.body.status
-    
-      db.collection('books').updateOne(
+      
+      db.collection('books').findOneAndUpdate(
         { title: title },
-        { $set: { status: newStatus } },
+        { $set: { 
+        title: req.body.title,
+        author: req.body.author,
+        genre: req.body.genre,
+        rating: req.body.rating,
+        status: req.body.status
+        } },
         (err, result) => {
           if (err) return res.send(err)
           res.send(result)
+          
         }
       )
     })
