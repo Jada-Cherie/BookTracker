@@ -11,11 +11,15 @@ module.exports = function(app, passport, db) {
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function(req, res) {
         db.collection('books').find().toArray((err, result) => {
-          if (err) return console.log(err)
-          res.render('profile.ejs', {
-            user : req.user,
-            messages: result
-          })
+          if (err) {
+            res.send(err)
+          }else{
+            res.render('profile.ejs', {
+              user : req.user,
+              messages: result
+            })
+          }
+    
         })
     });
 
@@ -52,19 +56,24 @@ module.exports = function(app, passport, db) {
     })
 
     app.put('/messages', (req, res) => {
-      
-      db.collection('books').findOneAndUpdate(
+      const _id = ObjectId(req.body._id)
+      const title = req.body.title
+      const newStatus = req.body.status
+      db.collection('books').updateOne(
         { title: title },
         { $set: { 
-        title: req.body.title,
-        author: req.body.author,
-        genre: req.body.genre,
-        rating: req.body.rating,
-        status: req.body.status
+        status: newStatus
         } },
         (err, result) => {
-          if (err) return res.send(err)
-          res.send(result)
+          if (err){
+            res.send(err)
+          } else{
+            res.render('profile.ejs', {
+              user: req.user, 
+              messages: result
+            })
+          }
+         
           
         }
       )

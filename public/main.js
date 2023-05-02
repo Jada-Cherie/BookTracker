@@ -8,41 +8,30 @@ const btn = document.querySelector('button')
 var trash = document.getElementsByClassName("fa-trash")
 
 // Add event listener to form for submitting new books
-btn.addEventListener('click', (event) => {
-  event.preventDefault()
+btn.addEventListener('click', () => {
+  
 
   // Create a new book object from the form data
-  const newBook = {
-    title: titleInput.value,
-    author: authorInput.value,
-    genre: genreInput.value,
-    rating: ratingInput.value,
-    status: statusInput.value
-  }
-  // Send a POST request to the server to add the new book to the database
-  fetch('messages', {
-    method: 'post',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(newBook)
-  })
-  .then(response => {
-    if (response.ok) return response.json()
-  })
-  .then(data => {
-    console.log(data)
-    // const messagesList = document.querySelector('.messages');
-    // const newBookItem = document.createElement('li')
-    // newBookItem.className = 'message'
-    // newBookItem.innerHTML = `
-    // <span>${book.title}</span>
-    // <span>${book.author}</span>
-    // <span>${book.genre}</span>
-    // <span>${book.rating}</span>
-    // <span>${book.status}</span>
-    // <span><i class="fa fa-trash" aria-hidden="true"></i></span>`
-    // messagesList.appendChild(newBookItem)
-    window.location.reload(true)
-  })
+  // const newBook = {
+  //   title: titleInput.value,
+  //   author: authorInput.value,
+  //   genre: genreInput.value,
+  //   rating: ratingInput.value,
+  //   status: statusInput.value
+  // }
+  // // Send a POST request to the server to add the new book to the database
+  // fetch('messages', {
+  //   method: 'post',
+  //   headers: {'Content-Type': 'application/json'},
+  //   body: JSON.stringify(newBook)
+  // })
+  // .then(response => {
+  //   if (response.ok) return response.json()
+  // })
+  // .then(data => {
+  //   console.log(data)
+  //   window.location.reload(true)
+  // })
 
 })
 
