@@ -16,7 +16,7 @@ module.exports = function(app, passport, db) {
           }else{
             res.render('profile.ejs', {
               user : req.user,
-              messages: result
+              books: result
             })
           }
     
@@ -32,16 +32,7 @@ module.exports = function(app, passport, db) {
     });
 
 // book tracker routes ===============================================================
-// Define Book model
-// const Book = mongoose.model('Book', {
-//   title: String,
-//   author: String,
-//   genre: String,
-//   rating: Number,
-//   status: { type: String, enum: ['read', 'reading'], default: 'reading' }
-// })
-
-    app.post('/messages', (req, res) => {
+    app.post('/bookLogged', (req, res) => {
       db.collection('books').save({
         title: req.body.title,
         author: req.body.author,
@@ -55,31 +46,32 @@ module.exports = function(app, passport, db) {
       })
     })
 
-    app.put('/messages', (req, res) => {
-      const _id = ObjectId(req.body._id)
-      const title = req.body.title
-      const newStatus = req.body.status
-      db.collection('books').updateOne(
-        { title: title },
-        { $set: { 
-        status: newStatus
-        } },
-        (err, result) => {
-          if (err){
-            res.send(err)
-          } else{
-            res.render('profile.ejs', {
-              user: req.user, 
-              messages: result
-            })
-          }
-         
-          
+    app.put('/bookUpdated', (req, res) => {
+      console.log(req.body)
+      const {title, author, genre, rating, status, id} = req.body
+      console.log(id)
+      db.collection('books').findOneAndUpdate({
+        "_id":ObjectId(id) 
+      }, {
+        $set: {
+          title: title,
+          author: author,
+          genre: genre,
+          rating: rating,
+          status: status
         }
-      )
-    })
+      }, {
+        // sort: { _id: -1 },
+        returnOriginal : false
+        // upsert: true //if record not found then create one
+      }, (err, result) => {
+        if (err) return res.send(err)
+        console.log(result)
+        res.send(result)
+      })
+  })
 
-    app.delete('/messages', (req, res) => {
+    app.delete('/bookDeleted', (req, res) => {
       const _id = ObjectId(req.body._id)
       db.collection('books').findOneAndDelete({
         _id
